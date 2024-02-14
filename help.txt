@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "LPD-hardware/TestServo.py", line 1, in <module>
+    from adafruit_servokit import ServoKit
+  File "/home/pigeon/.local/lib/python3.6/site-packages/adafruit_servokit.py", line 36, in <module>
+    from adafruit_pca9685 import PCA9685
+  File "/home/pigeon/.local/lib/python3.6/site-packages/adafruit_pca9685.py", line 39, in <module>
+    from adafruit_register.i2c_struct import UnaryStruct
+  File "/home/pigeon/.local/lib/python3.6/site-packages/adafruit_register/i2c_struct.py", line 22, in <module>
+    from circuitpython_typing.device_drivers import I2CDeviceDriver
+  File "/home/pigeon/.local/lib/python3.6/site-packages/circuitpython_typing/__init__.py", line 79
+    def read(self, count: Optional[int] = None, /) -> Optional[bytes]:
+                                                ^
+SyntaxError: invalid syntax
+Exiting... 
+Cleaning up pins
