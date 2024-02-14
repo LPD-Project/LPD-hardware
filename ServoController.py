@@ -21,8 +21,8 @@
 # CODE SERVO
 
 from adafruit_servokit import Servokit
-import time
-import cv2 
+# import time
+# import cv2 
 
 class ServoController:
     def __init__(self, width, height, fov_width, fov_height, init_angle):
@@ -46,45 +46,52 @@ class ServoController:
         angle_y = position[1] * self.fov_height / self.height
         return angle_x, angle_y
     
+    def isHuman(self, position):
+        if position["Class"] == "person":
+            return True
+        else:
+            return False
+
     def moveServo(self, position):
         angle_x, angle_y = self.pos2angle(position)
         self.servo_x.angle = angle_x + self.start_angle_x
         self.servo_y.angle = angle_y + self.start_angle_y
 
-camera = cv2.VideoCapture(1)
-fov_width = 62.2
-fov_height = 48.8
-start_angle_x = 45 - (fov_width / 2)
-start_angle_y = 45 - (fov_height / 2)
-view_width = 1920
-view_height = 1080
-view_width = camera.get(cv2.CAP_PROP_FRAME_WIDTH)
-view_height = camera.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
-servo_kit = Servokit(channels=16) # set channels of servo : PCA9685 have 16 channels
+# camera = cv2.VideoCapture(1)
+# fov_width = 62.2
+# fov_height = 48.8
+# start_angle_x = 45 - (fov_width / 2)
+# start_angle_y = 45 - (fov_height / 2)
+# view_width = 1920
+# view_height = 1080
+# view_width = camera.get(cv2.CAP_PROP_FRAME_WIDTH)
+# view_height = camera.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
-servo_x = servo_kit.servo[0]
-servo_y = servo_kit.servo[1]
+# servo_kit = Servokit(channels=16) # set channels of servo : PCA9685 have 16 channels
 
-def init_servo():
-    servo_x.angle = 45
-    servo_y.angle = 45
+# servo_x = servo_kit.servo[0]
+# servo_y = servo_kit.servo[1]
 
-# Range of Servo X Should be 66 degree ()
+# def init_servo():
+#     servo_x.angle = 45
+#     servo_y.angle = 45
 
-def pos2angle(position):
-    angleX = position[0] * fov_width / view_width
-    angleY = position[1] * fov_height / view_height
-    return angleX, angleY
+# # Range of Servo X Should be 66 degree ()
 
-def moveServo(position):
-    angle_x, angle_y = pos2angle(position)
-    servo_x.angle = angle_x + start_angle_x
-    servo_y.angle = angle_y + start_angle_y
+# def pos2angle(position):
+#     angleX = position[0] * fov_width / view_width
+#     angleY = position[1] * fov_height / view_height
+#     return angleX, angleY
 
-init_servo()
-position = 360, 587 # x-axis Range 0 - 1920 y-axis Range 0 - 1080
+# def moveServo(position):
+#     angle_x, angle_y = pos2angle(position)
+#     servo_x.angle = angle_x + start_angle_x
+#     servo_y.angle = angle_y + start_angle_y
 
-# servo_kit.servo[0].angle = 90 # Rotate the servo[0] for 90 degree >> EXAMPLE
+# init_servo()
+# position = 360, 587 # x-axis Range 0 - 1920 y-axis Range 0 - 1080
 
-moveServo(position)
+# # servo_kit.servo[0].angle = 90 # Rotate the servo[0] for 90 degree >> EXAMPLE
+
+# moveServo(position)
