@@ -21,7 +21,8 @@
 # CODE SERVO
 
 from adafruit_servokit import Servokit
-# import time
+import Jetson.GPIO as GPIO
+import time
 # import cv2 
 
 class ServoController:
@@ -41,13 +42,35 @@ class ServoController:
         self.servo_x.angle = self.init_angle
         self.servo_y.angle = self.init_angle
 
+        self.init_laser()
+        print("ServoController has been initialized")
+
+    def init_laser(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(33, GPIO.OUT)
+        GPIO.setup(32, GPIO.OUT)
+        self.pwm_laser = GPIO.PWM(33, 100)
+        self.gnd_laser = GPIO.PWM(32, 100)
+        self.pwm_laser.start(0)
+        self.gnd_laser.start(0)
+        print("Laser has been Initialized")
+
     def pos2angle(self, position):
         angle_x = position[0] * self.fov_width / self.width
         angle_y = position[1] * self.fov_height / self.height
         return angle_x, angle_y
     
+    def isPigeon(self, position):
+        if position["Class"] == "pigeon":
+            self.laser_set100()
+            return True
+        else:
+            self.laser_set0()
+            return False
+
     def isHuman(self, position):
-        if position["Class"] == "person":
+        if position["Class"] == "person" and position["Class"] == "pigeon":
+            self.laser_set50()
             return True
         else:
             return False
@@ -57,6 +80,62 @@ class ServoController:
         self.servo_x.angle = angle_x + self.start_angle_x
         self.servo_y.angle = angle_y + self.start_angle_y
 
+    def laser_set100(self):
+        self.pwm_laser.ChangeDutyCycle(100)     # Set Duty Cycle to 100%
+
+    def laser_set50(self):
+        self.pwm_laser.ChangeDutyCycle(50)      # Set Duty Cycle to 50%
+
+    def laser_set25(self):
+        self.pwm_laser.ChangeDutyCycle(25)      # Set Duty Cycle to 25%
+
+    def laser_set0(self):
+        self.pwm_laser.ChangeDutyCycle(0)       # Turn off Laser
+
+    def moveServo(self, position):
+        if self.isPigeon() == True:
+            if self.isHuman() == True:
+                self.laser_set50()
+
+
+# position = [456, 783]
+# servo_con = ServoController(1920, 1080, 62.2, 48.8, 45)
+
+# servo_con.moveServo(position)
+
+# PWM Controller ===============================================
+
+# sudo /opt/nvidia/jetson-io/jetson-io.py
+
+# sudo find /opt/nvidia/jetson-io/ -mindepth 1 -maxdepth 1 -type d -exec touch {}/__init__.py \;
+
+# sudo /opt/nvidia/jetson-io/jetson-io.py
+
+# sudo mkdir /boot/dtb
+
+# sudo cp -v /boot/tegra210-p3448-0000-p3449-0000-[ab]0[02].dtb /boot/dtb/
+
+# sudo /opt/nvidia/jetson-io/jetson-io.py
+
+# Enable PWM Select Configure 40-pin expansion header
+# Select PWM0 (32) and PWM2 (33)
+# Back and save then reboot
+
+# sudo pip install Jetson.GPIO
+
+# GPIO.setmode(GPIO.BOARD)
+# GPIO.setup(33, GPIO.OUT)
+# GPIO.setup(32, GPIO.OUT)
+
+# pwm_laser = GPIO.PWM(33, 100)
+# gnd_laser = GPIO.PWM(32, 100)
+# pwm_laser.start(5)
+# gnd_laser.start(0)
+# pwm_laser.ChangeDutyCycle(1)
+# pwm_laser.ChangeDutyCycle(99)
+# GPIO.cleanup()
+
+#==============================================================
 
 # camera = cv2.VideoCapture(1)
 # fov_width = 62.2
