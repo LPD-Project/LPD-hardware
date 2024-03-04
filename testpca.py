@@ -40,8 +40,8 @@ class HardwareController:
         self.height = height                                            # Set Video Resolusion Height
         self.fov_width = fov_width                                      # Set Camera's Field of View Width
         self.fov_height = fov_height                                    # Set Camera's Field of View Height
-        self.init_angle_x = init_angle_x                                # Set Initial Motor Angle X
-        self.init_angle_y = init_angle_y                                # Set Initial Motor Angle Y
+        self.init_angle_x = init_angle_x                                # Set Initial Motor Angle X :Calibrating 47.7
+        self.init_angle_y = init_angle_y                                # Set Initial Motor Angle Y :Calibrating 30.5
         self.min_angle_x = self.init_angle - (self.fov_width / 2)       # Minimum Rotate Angle X
         self.min_angle_y = self.init_angle - (self.fov_height / 2)      # Minimum Rotate Angle Y
         self.max_angle_x = self.min_angle_x + self.fov_width            # Maximum Rotate Angle X
