@@ -100,36 +100,6 @@ class DarknetObjectDetector:
             self.hw_ctl.laser_off()
             #self.hw_ctl.moveServo(self.hw_ctl.init_position)
     
-    @staticmethod        
-    def calPos(data_pos):
-        class_name = "bird"
-        closest_obj = None
-        closest_distance = float('inf')
-
-       
-
-        for obj_data in data_pos:
-                if obj_data["Class"] != class_name:
-                    continue  # ข้าม obj_data
-
-                bottom_distance = abs(obj_data["Bottom"] ) #540
-                left_distance = abs(obj_data["Left"])
-                
-                if left_distance < closest_distance and bottom_distance < closest_distance:
-                    closest_obj = obj_data
-                    closest_distance = max(left_distance, bottom_distance)
-
-        if closest_obj is not None:
-                print("Object Number:", closest_obj["Object Number"])
-                print("Top:", closest_obj["Top"])
-                print("Left:", closest_obj["Left"])
-                print("Bottom:", closest_obj["Bottom"])
-                print("Right:", closest_obj["Right"])
-                print("Class:", closest_obj["Class"])
-                return closest_obj
-        else:
-                #print("No bird object found meeting the criteria.")
-                return None
 
     def video_capture(self, raw_frame_queue, preprocessed_frame_queue, darknet_height, darknet_width):
         cap = cv2.VideoCapture("/dev/video0")
